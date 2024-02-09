@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "allowSyntheticDefaultImports": true,
+    "module": "NodeNext",
+    "target": "ES2017",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+
+    "strict": true, // Don't be daft. Always be strict.
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": true,
+
+    "paths": {
+      "@maranomynet/libtools": ["./src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "_npm-lib"]
+}
