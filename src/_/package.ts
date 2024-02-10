@@ -1,7 +1,7 @@
 // import { describe, expect, test } from "bun:test";
 import { sync as glob } from 'glob';
 import { readFile, writeFile } from 'node:fs/promises';
-import { createInterface } from 'readline';
+import { createInterface } from 'node:readline';
 
 import {
   $,
