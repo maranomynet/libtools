@@ -16,7 +16,7 @@ type Args = {
  * For example, if the script is called with `--foo=bar --baz --smu=false`, then `args` will be:
  * `{ foo: 'bar', baz: true, smu: false }`
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#args-object
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#args-object
  */
 export const args: Readonly<Args> = process.argv.slice(2).reduce<Args>((map, arg) => {
   const [key, value] = arg.replace(/^-+/, '').split('=');
@@ -33,14 +33,14 @@ export const args: Readonly<Args> = process.argv.slice(2).reduce<Args>((map, arg
 /**
  * Shorthand for immediate `process.exit(1)`.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#logging-and-errors
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#logging-and-errors
  */
 export const exit1 = () => process.exit(1);
 
 /**
  * Logs trown error message to the console and then continues
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#logging-and-errors
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#logging-and-errors
  */
 export const logError = (err: unknown): void => {
   const message =
@@ -57,7 +57,7 @@ export const logError = (err: unknown): void => {
 /**
  * Calls `logError` and then exits the `process` with code 1.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#logging-and-errors
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#logging-and-errors
  */
 export const logThenExit1 = (err: unknown) => {
   logError(err);
@@ -68,7 +68,7 @@ export const logThenExit1 = (err: unknown) => {
  * Sugar No-op function that signals to the reader that the error is being
  * intentionally ignored.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#logging-and-errors
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#logging-and-errors
  */
 export const ignoreError = () => undefined;
 
@@ -86,7 +86,7 @@ type Falsy = undefined | null | false | 0;
  * If `continueOnError` is `true`, the process will simply throw (i.e. reject
  * the Promise) instead of exiting the `process` with code `1`.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#shell$
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#shell$
  */
 export const $ = (
   cmd: string | Array<string | Falsy>,
@@ -126,7 +126,7 @@ export const $ = (
  * Prompts the user with a question and returns a promise that resolves to
  * `true` if the user enters "y" or "Y" and `false` if the user enters "n" or "N".
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#promptyn
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#promptyn
  */
 export const promptYN = (question: string, defAnswer?: 'y' | 'n'): Promise<boolean> =>
   new Promise((resolve) => {
@@ -183,7 +183,7 @@ const _defaultRunner: Runner = /*#__PURE__*/ (() => {
  *
  * Defaults to 'npm' if no lock file is found.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#script-runner
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-runner
  */
 export let runner: Runner = _defaultRunner;
 
@@ -202,14 +202,14 @@ const _runCmds: Record<Runner, string> = {
  * - `yarn run `
  * - `bun run --bun `
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#script-runner
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-runner
  */
 export let runCmd = _runCmds[runner];
 
 /**
  * Set the project `runner` manually, if the default detection is not working.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#script-runner
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-runner
  */
 export const setRunner = (newRunner?: Runner) => {
   newRunner = newRunner && newRunner in _runCmds ? newRunner : _defaultRunner;

@@ -5,14 +5,14 @@
 /**
  * Expects `T` to be `true`
  *
- * @see https://www.npmjs.com/package/@reykjavik/hanna-utils#type-expect
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#type-expectt
  */
 export type Expect<T extends true> = T;
 
 /**
  * Returns true if types `A` and `B` are equal (and neither is `any`)
  *
- * @see https://www.npmjs.com/package/@reykjavik/hanna-utils#type-eequals
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#type-eequalsa-b
  */
 export type Equals<A, B> = UnlessAny<
   A,
@@ -29,7 +29,7 @@ export type Equals<A, B> = UnlessAny<
 /**
  * Returns true if type `A` extends type `B` (and neither is `any`)
  *
- * @see https://www.npmjs.com/package/@reykjavik/hanna-utils#type-extends
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#type-extendsa-b
  */
 export type Extends<A, B> = UnlessAny<
   A,
@@ -40,7 +40,7 @@ export type Extends<A, B> = UnlessAny<
 /**
  * Returns true if type `A` does NOT extend type `B` (and neither is `any`)
  *
- * @see https://www.npmjs.com/package/@reykjavik/hanna-utils#type-notextends
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#type-notextendsa-b
  */
 export type NotExtends<A, B> = UnlessAny<
   A,

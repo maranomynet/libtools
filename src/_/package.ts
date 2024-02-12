@@ -170,7 +170,7 @@ export type UpdatePkgVersionOpts = {
  * changelog, and their conventional commit prefixees ("**BREAKING**", "feat:",
  * "fix:", "docs:")
  *
- * @see  https://github.com/maranomynet/libtools/tree/v0.0#updatepkgversion
+ * @see  https://github.com/maranomynet/libtools/tree/v0.1#updatepkgversion
  */
 export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<void> => {
   const {
@@ -242,7 +242,7 @@ export type PackageVersionOpts = {
  *
  * The name of the field can be customized with the `versionKey` option.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#getpkgversion
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#getpkgversion
  */
 export const getPkgVersion = async (opts?: PackageVersionOpts): Promise<string> => {
   const { root = '.', versionKey = 'version', pkgJsonSuffix = '' } = opts || {};
@@ -325,7 +325,7 @@ const addReferenePathsToIndex = async (
  *
  * Put this folder in your `.gitignore` file.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#distfolder
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#distfolder
  */
 export const distFolder = '_npm-lib';
 
@@ -372,7 +372,7 @@ export type BuildNpmLibOpts = {
  * as entry points to build the CommonJS and ESM versions of the library into
  * the `distDir` folder.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#buildnpmlib
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#buildnpmlib
  */
 export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
   const {
@@ -472,7 +472,7 @@ export type PublishToNpmOpts = {
  * Publishes the library to npm (using `npm publish`) and commits the
  * `CANGELOG.md` and `package.json` changes to the local git repo.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#publishtonpm
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#publishtonpm
  */
 export const publishToNpm = async (opts?: PublishToNpmOpts): Promise<void> => {
   const { root = '.', changelogSuffix = '', pkgJsonSuffix = '', showName } = opts || {};

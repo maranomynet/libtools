@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- docs: Fix JSDoc `@see` links to README chapters
 
 ## 0.1.1
 

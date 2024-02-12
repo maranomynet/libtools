@@ -44,7 +44,7 @@ type CheckOpts = {
  * Reports all warnings and errors, but DOES NOT EXIT.\
  * Does NOT auto-fix anyting.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#lintsources
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#lintsources
  */
 export const lintSources = async (): Promise<void> => {
   await $(runCmd + eslint(), true).catch(ignoreError);
@@ -61,7 +61,7 @@ type ErrorCheckOpts = {
    *
    * Default: `undefined`
    *
-   * @see https://github.com/maranomynet/libtools/tree/v0.0#errorchecksources
+   * @see https://github.com/maranomynet/libtools/tree/v0.1#errorchecksources
    */
   tsWorkspaces?: Array<string>;
 } & CheckOpts;
@@ -71,7 +71,7 @@ type ErrorCheckOpts = {
  * It ignores warnings, but exits if errors are found.\
  * Does NOT auto-fix anyting.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#errorchecksources
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#errorchecksources
  */
 export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void> => {
   await $(runCmd + eslint({ errorsonly: true }), opts.continueOnError);
@@ -92,7 +92,7 @@ export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void
  * Auto-fixes all auto-fixable issues, but does NOT report anything.\
  * Exits if errors are found.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.0#formatsources
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#formatsources
  */
 export const formatSources = async (opts: CheckOpts = {}): Promise<void> => {
   await $(runCmd + prettier({ autofix: true, silent: true }), opts.continueOnError);
