@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: Support reading oldVersion from range headings in `CHANGELOG.md`
 
 ## 0.1.1 – 0.1.2
 

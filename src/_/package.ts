@@ -50,7 +50,7 @@ const updateChangelog = async (
     releaseIdx > 0
       ? changelog
           .slice(releaseIdx, releaseIdx + 128)
-          .match(/##\s+(\d+)\.(\d+)\.(\d+)/)
+          .match(/##\s+(?:\d+\.\d+\.\d+\s*[-–—]\s*)(\d+)\.(\d+)\.(\d+)/)
           ?.slice(1)
           .map(Number)
       : [0, 0, 0];
