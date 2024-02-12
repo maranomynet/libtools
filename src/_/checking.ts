@@ -1,3 +1,4 @@
+import { normalizeTSCfgPaths } from './checking.privates.js';
 import { $, ignoreError, runCmd } from './utils.js';
 
 type LintOpts = {
@@ -27,6 +28,12 @@ const prettier = ({ autofix, silent, errorsonly }: LintOpts = {}) =>
 // ===========================================================================
 
 type CheckOpts = {
+  /**
+   * Controls whether the check should hard exit on errors, or merely reject
+   * the promise to allow you to handle the error (and possibly exit) manually.
+   *
+   * Default: `false`
+   */
   continueOnError?: boolean;
 };
 
@@ -46,6 +53,19 @@ export const lintSources = async (): Promise<void> => {
 
 // ===========================================================================
 
+type ErrorCheckOpts = {
+  /**
+   * An array additional TypeScript workspaces to type-check.\
+   * Can be either a relative path to a tsconfig file, or a folder that
+   * containings a file called `tsconfig.json`.
+   *
+   * Default: `undefined`
+   *
+   * @see https://github.com/maranomynet/libtools/tree/v0.0#errorchecksources
+   */
+  tsWorkspaces?: Array<string>;
+} & CheckOpts;
+
 /**
  * Error-checks the project's sources using ESLint and the TypeScript's tsc.\
  * It ignores warnings, but exits if errors are found.\
@@ -53,11 +73,15 @@ export const lintSources = async (): Promise<void> => {
  *
  * @see https://github.com/maranomynet/libtools/tree/v0.0#errorchecksources
  */
-export const errorCheckSources = async (opts: CheckOpts = {}): Promise<void> => {
+export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void> => {
   await $(runCmd + eslint({ errorsonly: true }), opts.continueOnError);
-  await $(
-    `${runCmd}tsc --project tsconfig.json --noEmit --pretty --incremental false`,
-    opts.continueOnError
+  await Promise.all(
+    normalizeTSCfgPaths(opts.tsWorkspaces).map((tsConfig) =>
+      $(
+        `${runCmd}tsc --project ${tsConfig} --noEmit --pretty --incremental false`,
+        opts.continueOnError
+      )
+    )
   );
 };
 

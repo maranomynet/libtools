@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: Add `tsWorkspaces` option to `errorCheckSources()`
 
 ## 0.1.0
 

@@ -284,14 +284,27 @@ file and VSCode's `search.exclude` setting:
 This package offers a few tools to ensure code quality. They assume you have
 ESLint and Prettier installed and configured.
 
+**Shared options:**
+
+- **`continueOnError`** — (Default: `false`)  
+  Controls whether the check should hard exit on errors, or merely reject the
+  promise to allow you to handle the error (and possibly exit) manually.
+
 ### `errorCheckSources`
 
 **Syntax:**
-`errorCheckSources(opts?: { continueOnError?: boolean }): Promise<void>`
+`errorCheckSources(opts?: { tsWorkspaces?: Array<string>, continueOnError?: boolean }): Promise<void>`
 
 Error-checks the project's sources using ESLint and the TypeScript compiler.
 It ignores warnings, but exits if errors are found. Does NOT auto-fix
 anything.
+
+**Option:**
+
+- **`tsWorkspaces`**`?: Array<string>` — (Default: `[]`)  
+   An array additional TypeScript workspaces to type-check.\
+   Can be either a relative path to a tsconfig file, or a folder that containings
+  a file called `tsconfig.json`.
 
 ```ts
 import { errorCheckSources } from '@maranomynet/libtools';
@@ -302,6 +315,14 @@ await errorCheckSources(); // Exits on errors.
 await errorCheckSources({ continueOnError: true }).catch((err) => {
   // do something custom
 });
+
+await errorCheckSources({
+  tsWorkspaces: ['api-server', './tsconfig.testserver.json'],
+});
+// Runs tsc for:
+//  - `./tsconfig.json`  (<-- always checked!)
+//  - `./api-server/tsconfig.json`
+//  - `./tsconfig.testserver.json`
 ```
 
 ---
