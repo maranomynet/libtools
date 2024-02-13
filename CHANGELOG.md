@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- fix: Export `typeCheckSources` from the package
 
 ## 0.1.4 — 0.1.5
 

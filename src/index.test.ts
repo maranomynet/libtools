@@ -44,6 +44,7 @@ if (false as boolean) {
 
     formatSources: true,
     errorCheckSources: true,
+    typeCheckSources: true,
     lintSources: true,
   };
 

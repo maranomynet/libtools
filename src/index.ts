@@ -1,4 +1,9 @@
-export { errorCheckSources, formatSources, lintSources } from './_/checking.js';
+export {
+  errorCheckSources,
+  formatSources,
+  lintSources,
+  typeCheckSources,
+} from './_/checking.js';
 export type {
   BuildNpmLibOpts,
   PackageVersionOpts,
