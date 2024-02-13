@@ -3,13 +3,14 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- fix: Regression in detecting old version
 
 ## 0.1.1 – 0.1.3
 
 _2024-02-12_
 
 - feat: Add `tsWorkspaces` option to `errorCheckSources()`
-- feat: Support reading oldVersion from range headings in `CHANGELOG.md`
+- feat: Support reading old version from range headings in `CHANGELOG.md`
 - docs: Fix JSDoc `@see` links to README chapters
 
 ## 0.1.0

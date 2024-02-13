@@ -3,6 +3,7 @@ import { sync as glob } from 'glob';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline';
 
+import { getLatestVersion } from './package.privates.js';
 import {
   $,
   JSONObject,
@@ -45,15 +46,10 @@ const updateChangelog = async (
     throw new Error(`Could not find "${upcomingHeader}" header in ${changelogFileName}`);
   }
   upcomingIdx += upcomingHeader.length;
-  const releaseIdx = changelog.indexOf('## ', upcomingIdx);
-  const oldVersionArr =
-    releaseIdx > 0
-      ? changelog
-          .slice(releaseIdx, releaseIdx + 128)
-          .match(/##\s+(?:\d+\.\d+\.\d+\s*[-–—]\s*)(\d+)\.(\d+)\.(\d+)/)
-          ?.slice(1)
-          .map(Number)
-      : [0, 0, 0];
+
+  const { oldVersionArr, oldVersionHeaderIdx } = getLatestVersion(
+    changelog.slice(upcomingIdx)
+  );
   if (!oldVersionArr) {
     throw new Error(`Could not find a valid "last version" in ${changelogFileName}`);
   }
@@ -67,7 +63,10 @@ const updateChangelog = async (
   }
 
   const updates = changelog
-    .slice(upcomingIdx, releaseIdx > 0 ? releaseIdx : undefined)
+    .slice(
+      upcomingIdx,
+      oldVersionHeaderIdx > 0 ? upcomingIdx + oldVersionHeaderIdx : undefined
+    )
     .trim()
     .split(/\n\s*- /)
     .map((line) => line.trim().match(/^(\*\*BREAKING\*\*|feat:|fix:|docs:)/)?.[1])
@@ -92,7 +91,7 @@ const updateChangelog = async (
     } else {
       newVersionArr[patchIdx] = 0;
       newVersionArr[minorIdx] = 0;
-      newVersionArr[majorIdx] = oldVersionArr[majorIdx]! + 1;
+      newVersionArr[majorIdx] = oldVersionArr[majorIdx] + 1;
     }
   } else if (updates.includes('feat:')) {
     newVersionArr[patchIdx] = 0;
