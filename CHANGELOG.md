@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: `buildNpmLib` excludes `pkg.bin` paths from `pkg.exports`
 
 ## 0.1.4 — 0.1.6
 

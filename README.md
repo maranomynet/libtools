@@ -59,6 +59,9 @@ The project must contain a file called `tsconfig.build.json` with `include`
 and `exclude` fields that describe the files to be treated as entrypints and
 added to the published package.json's `exports` field.
 
+If your package contains a `pkg.bin` field, the `buildNpmLib` function will
+exclude its contents from the `pkg.exports` field.
+
 Your `package.json` should be set to `private: true` and contain a
 `npmPackageJson` field with overrides for the dist `package.json`.
 

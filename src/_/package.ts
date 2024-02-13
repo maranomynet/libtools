@@ -263,7 +263,7 @@ type MakeLibPackageJsonOpts = {
   distDir: string;
   root: string;
   pkgJsonSuffix: string;
-  extraFields?: Record<string, unknown>;
+  entryPoints: Array<string>;
 };
 
 /**
@@ -272,18 +272,37 @@ type MakeLibPackageJsonOpts = {
  * and removing any nully values.
  */
 const makeLibPackageJson = async (opts: MakeLibPackageJsonOpts): Promise<void> => {
-  const { distDir, root, pkgJsonSuffix, extraFields } = opts;
+  const { distDir, root, pkgJsonSuffix, entryPoints } = opts;
   const pkg = await readJSONFile(`${root}/package${pkgJsonSuffix}.json`);
   const libPkg: JSONObject = Object.fromEntries(
     Object.entries({
       ...pkg,
       ...(pkg.npmPackageJson as JSONObject),
-      ...extraFields,
       npmPackageJson: null,
     } satisfies JSONObject as JSONObject).filter(
       (entry): entry is [string, NonNullable<JSONValue>] => entry[1] != null
     )
   );
+
+  const bins = !libPkg.bin
+    ? []
+    : (typeof libPkg.bin === 'string' ? [libPkg.bin] : Object.values(libPkg.bin)).map(
+        (path) => String(path).replace(/^(\.\/)?/, './')
+      );
+
+  libPkg.exports = entryPoints.reduce((exports, file) => {
+    const token = file.replace(/\.tsx?$/, '');
+    const expToken = token === 'index' ? '.' : `./${token}`;
+    const expObj: (typeof exports)[string] = {
+      import: `./esm/${token}.js`,
+      require: `./${token}.js`,
+    };
+    if (!bins.includes(expObj.require) && !bins.includes(expObj.import)) {
+      exports[expToken] = expObj;
+    }
+    return exports;
+  }, {} as Record<string, Record<'import' | 'require', string>>);
+
   await writeFile(`${distDir}/package.json`, JSON.stringify(libPkg, null, '\t'));
 };
 
@@ -417,17 +436,7 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
         root: root,
         pkgJsonSuffix,
         distDir: distFolder,
-        extraFields: {
-          exports: entryPoints.reduce((exports, file) => {
-            const token = file.replace(/\.tsx?$/, '');
-            const expToken = token === 'index' ? '.' : `./${token}`;
-            exports[expToken] = {
-              import: `./esm/${token}.js`,
-              require: `./${token}.js`,
-            };
-            return exports;
-          }, {} as Record<string, Record<'import' | 'require', string>>),
-        },
+        entryPoints,
       }),
       writeFile(`${distFolder}/esm/package.json`, JSON.stringify({ type: 'module' })),
     ]);
