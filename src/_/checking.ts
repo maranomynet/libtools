@@ -53,6 +53,34 @@ export const lintSources = async (): Promise<void> => {
 
 // ===========================================================================
 
+type TypeCheckOpts = ErrorCheckOpts & {
+  /**
+   * If `true`, the type-checker will watch the files for changes.
+   *
+   * Default: `false`
+   */
+  watch?: boolean;
+};
+
+/**
+ * Type-checks the project's sources using TypeScript's tsc.\
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#typechecksources
+ */
+export const typeCheckSources = async (opts: TypeCheckOpts = {}): Promise<void> => {
+  const watchFlags = opts.watch ? '--watch --preserveWatchOutput' : '';
+  await Promise.all(
+    normalizeTSCfgPaths(opts.tsWorkspaces).map((tsConfig) =>
+      $(
+        `${runCmd}tsc --project ${tsConfig} --noEmit ${watchFlags} --pretty --incremental false`,
+        opts.continueOnError
+      )
+    )
+  );
+};
+
+// ===========================================================================
+
 type ErrorCheckOpts = {
   /**
    * An array additional TypeScript workspaces to type-check.\
@@ -75,14 +103,7 @@ type ErrorCheckOpts = {
  */
 export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void> => {
   await $(runCmd + eslint({ errorsonly: true }), opts.continueOnError);
-  await Promise.all(
-    normalizeTSCfgPaths(opts.tsWorkspaces).map((tsConfig) =>
-      $(
-        `${runCmd}tsc --project ${tsConfig} --noEmit --pretty --incremental false`,
-        opts.continueOnError
-      )
-    )
-  );
+  await typeCheckSources(opts);
 };
 
 // ===========================================================================

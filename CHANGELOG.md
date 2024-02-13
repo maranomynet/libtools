@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: Add `typeCheckSources` function with `watch` option
 
 ## 0.1.4
 

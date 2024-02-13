@@ -20,6 +20,7 @@ bun add --dev @maranomynet/libtools
   - [`distFolder`](#distfolder)
 - [Code Quality Helpers.](#code-quality-helpers)
   - [`errorCheckSources`](#errorchecksources)
+  - [`typeCheckSources`](#typechecksources)
   - [`lintSources`](#lintsources)
   - [`formatSources`](#formatsources)
 - [Misc Utilities](#misc-utilities)
@@ -299,7 +300,7 @@ Error-checks the project's sources using ESLint and the TypeScript compiler.
 It ignores warnings, but exits if errors are found. Does NOT auto-fix
 anything.
 
-**Option:**
+**Exra Options:**
 
 - **`tsWorkspaces`**`?: Array<string>` — (Default: `[]`)  
    An array additional TypeScript workspaces to type-check.\
@@ -316,6 +317,7 @@ await errorCheckSources({ continueOnError: true }).catch((err) => {
   // do something custom
 });
 
+// multi-workspace:
 await errorCheckSources({
   tsWorkspaces: ['api-server', './tsconfig.testserver.json'],
 });
@@ -323,6 +325,36 @@ await errorCheckSources({
 //  - `./tsconfig.json`  (<-- always checked!)
 //  - `./api-server/tsconfig.json`
 //  - `./tsconfig.testserver.json`
+```
+
+---
+
+### `typeCheckSources`
+
+**Syntax:**
+`typeCheckSources(opts?: { tsWorkspaces?: Array<string>, watch?: boolean, continueOnError?: boolean }): Promise<void>`
+
+Type-checks the project's sources using TypeScript's `tsc`.
+
+Has the same options as [`errorCheckSources`](#errorchecksources), plus:
+
+- **`watch`**`?: boolean` — (Default: `false`)  
+  If `true`, the type-checker will watch the files for changes.
+
+```ts
+import { typeCheckSources } from '@maranomynet/libtools';
+
+await typeCheckSources(); // Exits on errors.
+
+// or...
+typeCheckSources({ watch: true }); // Does not exit on errors.
+
+// multi-workspace:
+await typeCheckSources({
+  tsWorkspaces: ['api-server', './tsconfig.testserver.json'],
+  watch: true,
+});
+// typechecks and watches all workspaces
 ```
 
 ---
