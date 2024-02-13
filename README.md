@@ -612,7 +612,3 @@ PRs are welcoms!
 
 See
 [CHANGELOG.md](https://github.com/maranomynet/libtools/blob/dev/CHANGELOG.md)
-
-```
-
-```
