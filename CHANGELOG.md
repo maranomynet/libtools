@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.4
+
+_2024-02-13_
+
 - fix: Regression in detecting old version
 
 ## 0.1.1 – 0.1.3
