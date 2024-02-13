@@ -3,12 +3,12 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
-- feat: Add `typeCheckSources` function with `watch` option
 
-## 0.1.4
+## 0.1.4 — 0.1.5
 
 _2024-02-13_
 
+- feat: Add `typeCheckSources` function with `watch` option
 - fix: Regression in detecting old version
 
 ## 0.1.1 – 0.1.3
