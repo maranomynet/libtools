@@ -401,6 +401,13 @@ export type BuildNpmLibOpts = {
     /** The module type of the file: `'commonjs'` or `'esm'`. */
     type: 'commonjs' | 'esm'
   ) => string | undefined | Promise<string | undefined>;
+
+  /**
+   * The type of module to build: `'esm'`, `'commonjs'`, or `'both'`.
+   *
+   * Default: `'both'`
+   */
+  type?: 'esm' | 'commonjs' | 'both';
 };
 
 /**
@@ -418,7 +425,10 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
     readmeSuffix = '',
     changelogSuffix = '',
     postProcess,
+    type = 'both',
   } = opts || {};
+  const doCJS = type !== 'esm';
+  const doESM = type !== 'commonjs';
   const tsCfgFile = `${root}/tsconfig.build.json`;
   try {
     const {
@@ -437,12 +447,16 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
       .map((filePath) => filePath.slice(srcDir.length + 1));
 
     await $(`rm -rf ${distFolder}`);
-    await $(
-      `${runCmd}tsc --project ${tsCfgFile} --module CommonJS --outDir ${distFolder}`
-    );
-    await $(
-      `${runCmd}tsc --project ${tsCfgFile} --module NodeNext --outDir ${distFolder}/esm`
-    );
+    if (doCJS) {
+      await $(
+        `${runCmd}tsc --project ${tsCfgFile} --module CommonJS --outDir ${distFolder}`
+      );
+    }
+    if (doESM) {
+      await $(
+        `${runCmd}tsc --project ${tsCfgFile} --module NodeNext --outDir ${distFolder}/esm`
+      );
+    }
     await $([
       `cp ${root}/README${readmeSuffix}.md ${distFolder}/README.md`,
       `cp ${root}/CHANGELOG${changelogSuffix}.md ${distFolder}/CHANGELOG.md`,
@@ -463,15 +477,16 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
     }
 
     await Promise.all([
-      addReferenePathsToIndex(entryPoints, distFolder),
-      addReferenePathsToIndex(entryPoints, `${distFolder}/esm`),
+      doCJS && addReferenePathsToIndex(entryPoints, distFolder),
+      doESM && addReferenePathsToIndex(entryPoints, `${distFolder}/esm`),
       makeLibPackageJson({
         root: root,
         pkgJsonSuffix,
         distDir: distFolder,
         entryPoints,
       }),
-      writeFile(`${distFolder}/esm/package.json`, JSON.stringify({ type: 'module' })),
+      doESM &&
+        writeFile(`${distFolder}/esm/package.json`, JSON.stringify({ type: 'module' })),
     ]);
   } catch (err) {
     logThenExit1(err);

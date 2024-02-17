@@ -155,6 +155,8 @@ await buildNpmLib(); // Exits on errors.
   A function to post-process the tsc built `.js` files. It should return the
   new/updated content for the `.js` file, or `undefined` if no changes were
   made.
+- **`type`**`?: 'esm' | 'commonjs' | 'both'` — (Default: `'both'`)  
+  The type of module to build: `'esm'`, `'commonjs'`, or `'both'`.
 - **`root`**`?: string` — (Default: `'.'`)  
   The root folder of the project/package.
 - **`pkgJsonSuffix`**`?: string` — (Default: `''`)  
