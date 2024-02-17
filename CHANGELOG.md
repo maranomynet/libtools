@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.8
+
+_2024-02-17_
+
 - feat: Add option `type` to `buildNpmLib`
 - feat: Add option `postProcess` to `buildNpmLib`
 
