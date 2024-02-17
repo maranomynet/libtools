@@ -150,6 +150,11 @@ await buildNpmLib(); // Exits on errors.
 
 - **`srcDir`**`?: string` — (Default: `'src'`)  
   The source folder where the build entry points are located.
+- **`postProcess`**`?: (jsFileContents: string, fileName: string, type: 'cjs' | 'esm') => string | undefined | Promise<string | undefined>`
+  — (Default: `undefined`)  
+  A function to post-process the tsc built `.js` files. It should return the
+  new/updated content for the `.js` file, or `undefined` if no changes were
+  made.
 - **`root`**`?: string` — (Default: `'.'`)  
   The root folder of the project/package.
 - **`pkgJsonSuffix`**`?: string` — (Default: `''`)  

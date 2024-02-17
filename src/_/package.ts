@@ -383,6 +383,24 @@ export type BuildNpmLibOpts = {
    * Default: `''`
    */
   readmeSuffix?: string;
+
+  /**
+   * A function to post-process the tsc built `.js` files.
+   *
+   * @param jsFileContents - The contents of the `.js` file.
+   * @param fileName - The path to the file — for reference.
+   * @param type - The module type of the file: `'commonjs'` or `'esm'`.
+   *
+   * @returns The new/updated content for the `.js` file, or `undefined` if no changes were made.
+   */
+  postProcess?: (
+    /** The contents of the `.js` file. */
+    jsFileContents: string,
+    /** The path to the file — for reference. */
+    fileName: string,
+    /** The module type of the file: `'commonjs'` or `'esm'`. */
+    type: 'commonjs' | 'esm'
+  ) => string | undefined | Promise<string | undefined>;
 };
 
 /**
@@ -399,6 +417,7 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
     pkgJsonSuffix = '',
     readmeSuffix = '',
     changelogSuffix = '',
+    postProcess,
   } = opts || {};
   const tsCfgFile = `${root}/tsconfig.build.json`;
   try {
@@ -428,6 +447,20 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
       `cp ${root}/README${readmeSuffix}.md ${distFolder}/README.md`,
       `cp ${root}/CHANGELOG${changelogSuffix}.md ${distFolder}/CHANGELOG.md`,
     ]);
+
+    if (postProcess) {
+      await Promise.all(
+        glob(`**/*.js`, { cwd: distFolder }).map(async (fileName) => {
+          const ioFileName = `${distFolder}/${fileName}`;
+          const moduleType = fileName.startsWith('esm/') ? 'esm' : 'commonjs';
+          const oldContents = (await readFile(ioFileName)).toString();
+          const newContents = await postProcess(oldContents, fileName, moduleType);
+          if (newContents != null && newContents !== oldContents) {
+            return writeFile(ioFileName, newContents);
+          }
+        })
+      );
+    }
 
     await Promise.all([
       addReferenePathsToIndex(entryPoints, distFolder),
