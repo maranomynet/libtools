@@ -9,6 +9,8 @@ yarn add --dev @maranomynet/libtools
 bun add --dev @maranomynet/libtools
 ```
 
+**Contents:**
+
 <!-- prettier-ignore-start -->
 
 - [Features](#features)
