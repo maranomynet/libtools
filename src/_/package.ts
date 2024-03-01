@@ -466,7 +466,8 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
       await Promise.all(
         glob(`**/*.js`, { cwd: distFolder }).map(async (fileName) => {
           const ioFileName = `${distFolder}/${fileName}`;
-          const moduleType = fileName.startsWith('esm/') ? 'esm' : 'commonjs';
+          const moduleType =
+            type !== 'both' ? type : fileName.startsWith('esm/') ? 'esm' : 'commonjs';
           const oldContents = (await readFile(ioFileName)).toString();
           const newContents = await postProcess(oldContents, fileName, moduleType);
           if (newContents != null && newContents !== oldContents) {
