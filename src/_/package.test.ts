@@ -115,18 +115,34 @@ describe('getLatestVersion', () => {
       },
     },
     {
-      title: 'does NOT support prerelease versions',
-      input: '## 1.0.0-beta\n\n- feat: Something\n',
+      title: 'supports prerelease versions',
+      input: '## 1.0.0-beta.1\n\n- feat: Something\n',
       expected: {
-        oldVersionArr: undefined,
+        oldVersionArr: [1, 0, 0],
         oldVersionHeaderIdx: 0,
       },
     },
     {
-      title: 'does NOT support prerelease versions in a range',
-      input: '## 1.0.0 – 1.0.1-beta\n\n- feat: Something\n',
+      title: 'supports build numbers in versions',
+      input: '## 1.0.0+beta.1\n\n- feat: Something\n',
       expected: {
-        oldVersionArr: undefined,
+        oldVersionArr: [1, 0, 0],
+        oldVersionHeaderIdx: 0,
+      },
+    },
+    {
+      title: 'supports prerelease versions in a range',
+      input: '## 1.0.0 – 1.0.1-beta.1\n\n- feat: Something\n',
+      expected: {
+        oldVersionArr: [1, 0, 1],
+        oldVersionHeaderIdx: 0,
+      },
+    },
+    {
+      title: 'supports prerelease versions in a range',
+      input: '## 1.0.0-beta.1 – 1.0.1-beta.3\n\n- feat: Something\n',
+      expected: {
+        oldVersionArr: [1, 0, 1],
         oldVersionHeaderIdx: 0,
       },
     },

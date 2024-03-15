@@ -4,6 +4,8 @@
 
 - ... <!-- Add new lines here. -->
 - feat: Add export `argStrings`
+- feat: Add support for pre-release versions in `updatePkgVersion()` — via the
+  `preReleaseName` option
 
 ## 0.1.8
 

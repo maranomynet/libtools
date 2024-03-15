@@ -10,7 +10,9 @@ export const getLatestVersion = (
     oldVersionHeaderIdx >= 0
       ? changelog
           .slice(oldVersionHeaderIdx, oldVersionHeaderIdx + 128)
-          .match(/^##\s+(?:\d+\.\d+\.\d+\s*[-–—]\s*)?(\d+)\.(\d+)\.(\d+)\s*(?:\n|$)/)
+          .match(
+            /^##\s+(?:\d+\.\d+\.\d+(?:[-+][a-z0-9-.]+)?\s*[-–—]\s*)?(\d+)\.(\d+)\.(\d+)(?:[-+][a-z0-9-.]+)?\s*(?:\n|$)/
+          )
           ?.slice(1)
           .map(Number)
       : [0, 0, 0];

@@ -27,13 +27,13 @@ type PgkJson = {
 // eslint-disable-next-line complexity
 const updateChangelog = async (
   changelogFileName: string,
-  opts?: Pick<UpdatePkgVersionOpts, 'offerDateShift'>
+  opts?: Pick<UpdatePkgVersionOpts, 'offerDateShift' | 'preReleaseName'>
 ): Promise<{
   oldVersion: string;
   newVersion: string;
   newChangelog: string;
 }> => {
-  const { offerDateShift } = opts || {};
+  const { offerDateShift, preReleaseName } = opts || {};
   const changelogFull = (await readFile(changelogFileName)).toString();
   const changelog = changelogFull.slice(0, 4000);
   const changelogTail = changelogFull.slice(4000);
@@ -99,7 +99,9 @@ const updateChangelog = async (
   } else {
     newVersionArr[patchIdx] = oldVersionArr[patchIdx]! + 1;
   }
-  const newVersion = newVersionArr.join('.');
+
+  const newVersion =
+    newVersionArr.join('.') + (preReleaseName ? `-${preReleaseName}` : '');
 
   const addNewLinesIdx = changelog.indexOf(addNewLines, upcomingIdx);
   if (addNewLinesIdx < 0) {
@@ -143,6 +145,12 @@ const updateChangelog = async (
 
 export type UpdatePkgVersionOpts = {
   /**
+   * Optional pre-release name to append to the version number. (e.g. `'beta.1'`)
+   *
+   * Deafult: `undefined` (none)
+   */
+  preReleaseName?: string;
+  /**
    * Should the user be offered to shift the release date N days into the future.
    *
    * Default: `false`
@@ -175,10 +183,15 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
   const {
     root = '.',
     offerDateShift,
+    preReleaseName,
     versionKey = 'version',
     changelogSuffix = '',
     pkgJsonSuffix = '',
   } = opts || {};
+
+  if (preReleaseName && !/^[a-z0-9.-]+$/.test(preReleaseName)) {
+    throw new Error(`Invalid pre-release name: ${JSON.stringify(preReleaseName)}`);
+  }
 
   const changelogFile = `${root}/CHANGELOG${changelogSuffix}.md`;
   const pkgFile = `${root}/package${pkgJsonSuffix}.json`;
@@ -188,7 +201,7 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
 
     const { oldVersion, newVersion, newChangelog } = await updateChangelog(
       changelogFile,
-      { offerDateShift }
+      { offerDateShift, preReleaseName }
     );
 
     if (oldVersion !== pkg[versionKey]) {
@@ -201,6 +214,8 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
     if (!versionOK) {
       throw new Error('Aborted by user');
     }
+
+    console.log({ newVersion });
 
     pkg[versionKey] = newVersion;
     await Promise.all([

@@ -196,6 +196,8 @@ await updatePkgVersion(); // Exits on errors.
 
 **`UpdatePkgVersionOpts`**:
 
+- **`preReleaseName`**`?: string` — (Default: `''`)  
+  Optional pre-release name to append to the version number. (e.g. `'beta.1'`)
 - **`offerDateShift`**`?: boolean` — (Default: `false`)  
   Should the user be offered to shift the release date N days into the future.
 - **`root`**`?: string` — (Default: `'.'`)  
