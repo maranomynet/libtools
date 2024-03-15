@@ -3,6 +3,8 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: Add option `tag` for `publishToNpm()` — defaults to the first segment
+  of the version's pre-release segment.
 
 ## 0.1.9
 

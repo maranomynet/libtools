@@ -538,6 +538,13 @@ export type PublishToNpmOpts = {
    * Default: `''`
    */
   changelogSuffix?: string;
+  /**
+   * The `--tag` option to pass to `npm publish`.
+   *
+   * Default: `''`
+   * ...or the first segement of the version number's pre-release name.
+   */
+  tag?: string;
 };
 
 /**
@@ -554,9 +561,12 @@ export const publishToNpm = async (opts?: PublishToNpmOpts): Promise<void> => {
     const version = pkg.version;
     const pkgName = showName ? `(${pkg.name})` : '';
 
+    const tag = opts?.tag || version.split('-')[1]?.split('.')[0];
+    const tagArg = tag ? `--tag ${tag}` : '';
+
     await $([
       `cd ${distFolder}`,
-      `npm publish  --access public`,
+      `npm publish  --access public ${tagArg}`,
       `cd ..`,
       `git add ${pkgJsonFile} ${root}/CHANGELOG${changelogSuffix}.md`,
       `git commit -m "release${pkgName}: v${version}"`,
