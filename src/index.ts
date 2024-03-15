@@ -21,6 +21,7 @@ export type { Equals, Expect, Extends, NotExtends } from './_/typetests.js';
 export type { JSONArray, JSONObject, JSONValue } from './_/utils.js';
 export {
   args,
+  argStrings,
   exit1,
   ignoreError,
   logError,

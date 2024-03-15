@@ -5,10 +5,6 @@ import { createInterface } from 'node:readline';
 
 // ===========================================================================
 
-type Args = {
-  [key: string]: string | boolean;
-};
-
 /**
  * The command line arguments passed to the script, parsed into an object
  * where the keys are the argument names and the values are the argument values.
@@ -18,14 +14,31 @@ type Args = {
  *
  * @see https://github.com/maranomynet/libtools/tree/v0.1#args-object
  */
-export const args: Readonly<Args> = process.argv.slice(2).reduce<Args>((map, arg) => {
+const _args: Record<string, string | boolean | undefined> = {};
+
+/**
+ * Filtered convenience clone of `args` with all `boolean` values removed.
+ *
+ * For example, if the script is called with `--foo=bar --baz --smu=false`, then `args` will be:
+ * `{ foo: 'bar' }`
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#argstrings-object
+ */
+const _argStrings: Record<string, string | undefined> = {};
+
+process.argv.slice(2).forEach((arg) => {
   const [key, value] = arg.replace(/^-+/, '').split('=');
   const loweValue = value?.toLowerCase();
-  map[key!] =
+  const argValue =
     value == null || loweValue === 'true' ? true : loweValue === 'false' ? false : value;
+  _args[key!] = argValue;
+  if (argValue && typeof argValue === 'string') {
+    _argStrings[key!] = argValue;
+  }
+});
 
-  return map;
-}, {});
+export const args: Readonly<typeof _args> = _args;
+export const argStrings: Readonly<typeof _argStrings> = _argStrings;
 
 // ===========================================================================
 // Logging and Errors

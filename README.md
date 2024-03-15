@@ -27,6 +27,7 @@ bun add --dev @maranomynet/libtools
   - [`formatSources`](#formatsources)
 - [Misc Utilities](#misc-utilities)
   - [`args` Object](#args-object)
+  - [`argStrings` Object](#argstrings-object)
   - [`shell$`](#shell)
   - [Script Runner](#script-runner)
   - [Logging and Errors](#logging-and-errors)
@@ -414,7 +415,7 @@ await formatSources({ continueOnError: true }).catch((err) => {
 
 ### `args` Object
 
-**Syntax:** `args: Record<string, string | boolean | undefined>`
+**Syntax:** `Record<string, string | boolean | undefined>`
 
 The command line arguments passed to the script, parsed into an object where
 the keys are the argument names and the values are the argument values.
@@ -430,11 +431,36 @@ bun  my-script.ts  --foo=bar  --baz  --smu=false
 ```ts
 import { args } from '@maranomynet/libtools';
 
-console.log(args.foo);
+console.log(args);
 // {
 //   foo: 'bar',
 //   baz: true,
 //   smu: false
+// }
+```
+
+---
+
+### `argStrings` Object
+
+**Syntax:** `Record<string, string | undefined>`
+
+Filtered convenience clone of `args` with all `boolean` values removed.
+
+So, if you call your script like this:
+
+```sh
+bun  my-script.ts  --foo=bar  --baz  --smu=false
+```
+
+…then in `my-script.ts`:
+
+```ts
+import { argStrings } from '@maranomynet/libtools';
+
+console.log(argStrings);
+// {
+//   foo: 'bar',
 // }
 ```
 

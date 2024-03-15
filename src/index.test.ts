@@ -26,6 +26,7 @@ if (false as boolean) {
     publishToNpm: true,
 
     args: true,
+    argStrings: true,
     distFolder: true,
 
     promptYN: true,
