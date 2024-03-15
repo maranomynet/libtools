@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.9
+
+_2024-03-15_
+
 - feat: Add export `argStrings`
 - feat: Add support for pre-release versions in `updatePkgVersion()` — via the
   `preReleaseName` option
