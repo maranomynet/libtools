@@ -3,16 +3,16 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
-- feat: Add option `tag` for `publishToNpm()` — defaults to the first segment
-  of the version's pre-release segment.
 
-## 0.1.9
+## 0.1.9 — 0.1.10
 
 _2024-03-15_
 
 - feat: Add export `argStrings`
 - feat: Add support for pre-release versions in `updatePkgVersion()` — via the
   `preReleaseName` option
+- feat: Add option `tag` for `publishToNpm()` — defaults to the first segment
+  of the version's pre-release segment.
 
 ## 0.1.8
 
