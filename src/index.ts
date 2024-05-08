@@ -27,8 +27,10 @@ export {
   logError,
   logThenExit1,
   promptYN,
-  runCmd,
+  runCmd, // eslint-disable-line deprecation/deprecation
   runner,
+  runPkgBin,
+  runScript,
   setRunner,
   $ as shell$,
 } from './_/utils.js';

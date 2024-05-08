@@ -29,7 +29,7 @@ bun add --dev @maranomynet/libtools
   - [`args` Object](#args-object)
   - [`argStrings` Object](#argstrings-object)
   - [`shell$`](#shell)
-  - [Script Runner](#script-runner)
+  - [Script and Package Binary Runner](#script-and-package-binary-runner)
   - [Logging and Errors](#logging-and-errors)
   - [`promptYN`](#promptyn)
 - [Type Testing Helpers](#type-testing-helpers)
@@ -506,33 +506,44 @@ await shell$([
 ]);
 ```
 
-### Script Runner
+<!-- #fragment anchor(s) to not break older v0.1 @see links -->
 
-There are different ways of running scripts, depending on whether you're using
-`npm`, `yarn` or `bun`.
+<a name="script-runner"></a>
 
-The package tries to auto-detect which runner you're using, based on the
-presence of `bun.lockb` and `yarn.lock` files — falling back to `npm` as a
-default.
+### Script and Package Binary Runner
+
+There are different ways of running scripts and package binaries, depending on
+whether you're using `npm`, `yarn` or `bun`.
+
+Libtools tries to auto-detect which runner you're using, based on the presence
+of `bun.lockb` and `yarn.lock` files — falling back to `npm` as a default.
 
 ```ts
-import { runner, runCmd, setRunner } from '@maranomynet/libtools';
+import {
+  runner,
+  runScript,
+  runPkgBin,
+  setRunner,
+} from '@maranomynet/libtools';
 
-console.log(runner); // Initial auto-detected value (defaults to 'npm')
+console.log(runner); // ??? (auto-detected for your project, defaults to 'npm')
 
-setRunner('bun'); // Force "bun" as the runner (for example)
+setRunner('npm'); // Force "npm" as the runner (for example)
 
-console.log(runner); // 'bun'
-console.log(runCmd); // 'bun run --bun '
+console.log(runner); // 'npm'
+console.log(runScript); // 'npm run '
+console.log(runPkgBin); // 'npm exec -- '
 ```
 
-The `runCmd` string is a prefix that can be used to run a script using the
-current runner. For example:
+The `runScript` string is a prefix that can be used to run a `package.json`
+script using the current runner, whereas `runPkgBin` executes the package
+binary of an installed dependency. For example:
 
 ```ts
-import { runCmd, shell$ } from '@maranomynet/libtools';
+import { ruScript, runPkgBin, shell$ } from '@maranomynet/libtools';
 
-await shell$(runCmd + 'vitest --watch');
+await shell$(runScript + 'test'); // runs pkg.scripts.test
+await shell$(runPkgBin + 'vitest --watch'); // runs node_modules/.bin/vitest
 ```
 
 ### Logging and Errors

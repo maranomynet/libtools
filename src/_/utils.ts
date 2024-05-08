@@ -34,9 +34,9 @@ process.argv.slice(2).forEach((arg) => {
   const loweValue = value?.toLowerCase();
   const argValue =
     value == null || loweValue === 'true' ? true : loweValue === 'false' ? false : value;
-  _args[key!] = argValue;
+  _args[key] = argValue;
   if (argValue && typeof argValue === 'string') {
-    _argStrings[key!] = argValue;
+    _argStrings[key] = argValue;
   }
 });
 
@@ -199,18 +199,26 @@ const _defaultRunner: Runner = /*#__PURE__*/ (() => {
  *
  * Defaults to 'npm' if no lock file is found.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.1#script-runner
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-and-package-binary-runner
  */
 export let runner: Runner = _defaultRunner;
 
-const _runCmds: Record<Runner, string> = {
+// ---------------------------------------------------------------------------
+
+const _runScriptCmds: Record<Runner, string> = {
   bun: 'bun run --bun ',
   npm: 'npm run ',
   yarn: 'yarn run ',
 };
 
+const _runPkgBinCmds: Record<Runner, string> = {
+  bun: 'bun run --bun ',
+  npm: 'npm exec -- ',
+  yarn: 'yarn run ',
+};
+
 /**
- * The prefix for running npm package scripts (for example in `shell$`
+ * The prefix for running npm package scripts (for example within `shell$`
  * commands), using the currently set `runner`.
  *
  * One of:
@@ -218,19 +226,38 @@ const _runCmds: Record<Runner, string> = {
  * - `yarn run `
  * - `bun run --bun `
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.1#script-runner
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-and-package-binary-runner
  */
-export let runCmd = _runCmds[runner];
+export let runScript = _runScriptCmds[runner];
+
+/** @deprecated Use `runScript` instead  (Will be removed in v0.2) */
+export let runCmd = runScript;
 
 /**
- * Set the project `runner` manually, if the default detection is not working.
+ * The prefix for running binaies of installed packages (for example within
+ * `shell$` commands), using the currently set `runner`.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.1#script-runner
+ * One of:
+ * - `npm exec -- `
+ * - `yarn run `
+ * - `bun run --bun `
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-and-package-binary-runner
+ */
+export let runPkgBin = _runPkgBinCmds[runner];
+
+/**
+ * Set the project `runner` manually, if the default auto-detection is not
+ * working.
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#script-and-package-binary-runner
  */
 export const setRunner = (newRunner?: Runner) => {
-  newRunner = newRunner && newRunner in _runCmds ? newRunner : _defaultRunner;
+  newRunner = newRunner && newRunner in _runScriptCmds ? newRunner : _defaultRunner;
   runner = newRunner;
-  runCmd = _runCmds[newRunner];
+  runScript = _runScriptCmds[newRunner];
+  runCmd = runScript;
+  runPkgBin = _runPkgBinCmds[newRunner];
 };
 
 // ===========================================================================

@@ -37,6 +37,8 @@ if (false as boolean) {
     runner: true,
     setRunner: true,
     runCmd: true,
+    runScript: true,
+    runPkgBin: true,
 
     logError: true,
     logThenExit1: true,

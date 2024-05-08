@@ -4,6 +4,8 @@
 
 - ... <!-- Add new lines here. -->
 - feat: filter out empty/anonymous `args` (i.e. `--`, `-`, etc.)
+- feat: Add `runPkgBin` for running package binaries
+- feat: Add (rename) `runScript` — deprecate `runCmd`
 
 ## 0.1.9 — 0.1.10
 
