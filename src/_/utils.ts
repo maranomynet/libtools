@@ -28,6 +28,9 @@ const _argStrings: Record<string, string | undefined> = {};
 
 process.argv.slice(2).forEach((arg) => {
   const [key, value] = arg.replace(/^-+/, '').split('=');
+  if (!key) {
+    return;
+  }
   const loweValue = value?.toLowerCase();
   const argValue =
     value == null || loweValue === 'true' ? true : loweValue === 'false' ? false : value;

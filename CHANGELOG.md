@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: filter out empty/anonymous `args` (i.e. `--`, `-`, etc.)
 
 ## 0.1.9 — 0.1.10
 
