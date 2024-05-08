@@ -1,5 +1,5 @@
 import { normalizeTSCfgPaths } from './checking.privates.js';
-import { $, ignoreError, runCmd } from './utils.js';
+import { $, ignoreError, runPkgBin } from './utils.js';
 
 type LintOpts = {
   autofix?: boolean;
@@ -8,6 +8,7 @@ type LintOpts = {
 };
 
 const eslint = ({ autofix, errorsonly, silent }: LintOpts = {}) =>
+  runPkgBin +
   [
     `eslint`,
     autofix ? '--fix' : '',
@@ -17,6 +18,7 @@ const eslint = ({ autofix, errorsonly, silent }: LintOpts = {}) =>
   ].join(' ');
 
 const prettier = ({ autofix, silent, errorsonly }: LintOpts = {}) =>
+  runPkgBin +
   [
     `prettier`,
     autofix ? '--write' : '--check',
@@ -47,8 +49,8 @@ type CheckOpts = {
  * @see https://github.com/maranomynet/libtools/tree/v0.1#lintsources
  */
 export const lintSources = async (): Promise<void> => {
-  await $(runCmd + eslint(), true).catch(ignoreError);
-  await $(runCmd + prettier(), true).catch(ignoreError);
+  await $(eslint(), true).catch(ignoreError);
+  await $(prettier(), true).catch(ignoreError);
 };
 
 // ===========================================================================
@@ -72,7 +74,7 @@ export const typeCheckSources = async (opts: TypeCheckOpts = {}): Promise<void> 
   await Promise.all(
     normalizeTSCfgPaths(opts.tsWorkspaces).map((tsConfig) =>
       $(
-        `${runCmd}tsc --project ${tsConfig} --noEmit ${watchFlags} --pretty --incremental false`,
+        `${runPkgBin}tsc --project ${tsConfig} --noEmit ${watchFlags} --pretty --incremental false`,
         opts.continueOnError
       )
     )
@@ -102,7 +104,7 @@ type ErrorCheckOpts = {
  * @see https://github.com/maranomynet/libtools/tree/v0.1#errorchecksources
  */
 export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void> => {
-  await $(runCmd + eslint({ errorsonly: true }), opts.continueOnError);
+  await $(eslint({ errorsonly: true }), opts.continueOnError);
   await typeCheckSources(opts);
 };
 
@@ -116,8 +118,8 @@ export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void
  * @see https://github.com/maranomynet/libtools/tree/v0.1#formatsources
  */
 export const formatSources = async (opts: CheckOpts = {}): Promise<void> => {
-  await $(runCmd + prettier({ autofix: true, silent: true }), opts.continueOnError);
-  await $(runCmd + eslint({ autofix: true, silent: true }), opts.continueOnError);
+  await $(prettier({ autofix: true, silent: true }), opts.continueOnError);
+  await $(eslint({ autofix: true, silent: true }), opts.continueOnError);
 };
 
 // ===========================================================================

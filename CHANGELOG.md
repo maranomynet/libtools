@@ -6,6 +6,8 @@
 - feat: filter out empty/anonymous `args` (i.e. `--`, `-`, etc.)
 - feat: Add `runPkgBin` for running package binaries
 - feat: Add (rename) `runScript` — deprecate `runCmd`
+- fix: `npm` errors when running `buildNpmLib` as well as `errorCheckSources`,
+  `formatSources`, `lintSources` and `typeCheckSources`
 
 ## 0.1.9 — 0.1.10
 

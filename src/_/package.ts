@@ -11,7 +11,7 @@ import {
   logThenExit1,
   promptYN,
   readJSONFile,
-  runCmd,
+  runPkgBin,
 } from './utils.js';
 
 type PgkJson = {
@@ -464,12 +464,12 @@ export const buildNpmLib = async (opts?: BuildNpmLibOpts) => {
     await $(`rm -rf ${distFolder}`);
     if (doCJS) {
       await $(
-        `${runCmd}tsc --project ${tsCfgFile} --module CommonJS --outDir ${distFolder}`
+        `${runPkgBin}tsc --project ${tsCfgFile} --module CommonJS --outDir ${distFolder}`
       );
     }
     if (doESM) {
       await $(
-        `${runCmd}tsc --project ${tsCfgFile} --module NodeNext --outDir ${distFolder}/esm`
+        `${runPkgBin}tsc --project ${tsCfgFile} --module NodeNext --outDir ${distFolder}/esm`
       );
     }
     await $([
