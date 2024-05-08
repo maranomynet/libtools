@@ -17,7 +17,7 @@ import * as moduleExports from './index.js';
 // Test Type Signature and Exports
 
 if (false as boolean) {
-  /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
 
   // Make sure the module exports are as advertised
   const exports: Record<keyof typeof moduleExports, true> = {
@@ -65,7 +65,7 @@ if (false as boolean) {
   type Extends_is_exported = Extends<true, boolean>;
   type NotExtends_is_exported = NotExtends<boolean, true>;
 
-  /* eslint-enable @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention */
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 }
 
 // ===========================================================================
