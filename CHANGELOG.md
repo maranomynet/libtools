@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.11
+
+_2024-05-08_
+
 - feat: filter out empty/anonymous `args` (i.e. `--`, `-`, etc.)
 - feat: Add `runPkgBin` for running package binaries
 - feat: Add (rename) `runScript` — deprecate `runCmd`
