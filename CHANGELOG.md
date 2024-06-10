@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.12
+
+_2024-06-10_
+
 - feat: Emit happy message after uneventful error-check/linting runs
 
 ## 0.1.11
