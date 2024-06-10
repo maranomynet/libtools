@@ -1,5 +1,5 @@
 import { normalizeTSCfgPaths } from './checking.privates.js';
-import { $, ignoreError, runPkgBin } from './utils.js';
+import { $, runPkgBin } from './utils.js';
 
 type LintOpts = {
   autofix?: boolean;
@@ -49,8 +49,15 @@ type CheckOpts = {
  * @see https://github.com/maranomynet/libtools/tree/v0.1#lintsources
  */
 export const lintSources = async (): Promise<void> => {
-  await $(eslint(), true).catch(ignoreError);
-  await $(prettier(), true).catch(ignoreError);
+  let ok = true;
+  const swallowError = () => {
+    ok = false;
+  };
+  await $(eslint(), true).catch(swallowError);
+  await $(prettier(), true).catch(swallowError);
+  if (ok as boolean) {
+    console.info('\n🎂 No issues found');
+  }
 };
 
 // ===========================================================================
@@ -79,6 +86,9 @@ export const typeCheckSources = async (opts: TypeCheckOpts = {}): Promise<void> 
       )
     )
   );
+  if (!opts.watch) {
+    console.info('\n🎂 No errors found');
+  }
 };
 
 // ===========================================================================
@@ -105,7 +115,7 @@ type ErrorCheckOpts = {
  */
 export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void> => {
   await $(eslint({ errorsonly: true }), opts.continueOnError);
-  await typeCheckSources(opts);
+  await typeCheckSources(opts); // Handles emitting "No errors found" message
 };
 
 // ===========================================================================
@@ -120,6 +130,7 @@ export const errorCheckSources = async (opts: ErrorCheckOpts = {}): Promise<void
 export const formatSources = async (opts: CheckOpts = {}): Promise<void> => {
   await $(prettier({ autofix: true, silent: true }), opts.continueOnError);
   await $(eslint({ autofix: true, silent: true }), opts.continueOnError);
+  console.info('\n🎂 Finished formatting');
 };
 
 // ===========================================================================

@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- feat: Emit happy message after uneventful error-check/linting runs
 
 ## 0.1.11
 
