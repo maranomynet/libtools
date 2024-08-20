@@ -38,17 +38,22 @@ const updateChangelog = async (
   const changelog = changelogFull.slice(0, 4000);
   const changelogTail = changelogFull.slice(4000);
 
-  const upcomingHeader = '## Upcoming...';
-  const addNewLines = '- ... <!-- Add new lines here. -->';
+  const upcomingRe = new RegExp('## (Upcoming|Unreleased)\\.{0,3}', 'i');
+  const addNewLinesRe = new RegExp(
+    '(?:- \\.\\.\\.)(?: <!-- Add new lines here\\.? -->)?',
+    'i'
+  );
 
-  let upcomingIdx = changelog.indexOf(upcomingHeader);
-  if (upcomingIdx < 0) {
-    throw new Error(`Could not find "${upcomingHeader}" header in ${changelogFileName}`);
+  const upcomingResult = upcomingRe.exec(changelog);
+  if (!upcomingResult) {
+    throw new Error(
+      `Could not find "${upcomingRe.source}" header in ${changelogFileName}`
+    );
   }
-  upcomingIdx += upcomingHeader.length;
+  const upcomingEndIdx = upcomingResult.index + upcomingResult[0].length;
 
   const { oldVersionArr, oldVersionHeaderIdx } = getLatestVersion(
-    changelog.slice(upcomingIdx)
+    changelog.slice(upcomingEndIdx)
   );
   if (!oldVersionArr) {
     throw new Error(`Could not find a valid "last version" in ${changelogFileName}`);
@@ -64,11 +69,11 @@ const updateChangelog = async (
 
   const updates = changelog
     .slice(
-      upcomingIdx,
-      oldVersionHeaderIdx > 0 ? upcomingIdx + oldVersionHeaderIdx : undefined
+      upcomingEndIdx,
+      oldVersionHeaderIdx > 0 ? upcomingEndIdx + oldVersionHeaderIdx : undefined
     )
     .trim()
-    .split(/\n\s*- /)
+    .split(/(?:^|\n\s*)- /)
     .map((line) => line.trim().match(/^(\*\*BREAKING\*\*|feat:|fix:|docs:)/)?.[1])
     .filter(/** @type {((x: unknown) => x is string)} */ (x) => !!x);
 
@@ -103,12 +108,10 @@ const updateChangelog = async (
   const newVersion =
     newVersionArr.join('.') + (preReleaseName ? `-${preReleaseName}` : '');
 
-  const addNewLinesIdx = changelog.indexOf(addNewLines, upcomingIdx);
-  if (addNewLinesIdx < 0) {
-    throw new Error(
-      `Could not find "${addNewLines}" marker at the top of ${changelogFileName}`
-    );
-  }
+  const addNewLinesResult = addNewLinesRe.exec(changelog.slice(upcomingEndIdx));
+  const addNewLinesEndIdx =
+    upcomingEndIdx +
+    (addNewLinesResult ? addNewLinesResult.index + addNewLinesResult[0].length : 0);
 
   const dayOffset: number = !offerDateShift
     ? 0
@@ -126,7 +129,7 @@ const updateChangelog = async (
   const releaseDate = new Date(Date.now() + dayOffset * DAY_MS);
 
   const newChangelog =
-    changelog.slice(0, addNewLinesIdx + addNewLines.length) +
+    changelog.slice(0, addNewLinesEndIdx) +
     [
       '',
       '',
@@ -134,8 +137,9 @@ const updateChangelog = async (
       '',
       `_${releaseDate.toISOString().slice(0, 10)}_`,
       '',
+      '',
     ].join('\n') +
-    changelog.slice(addNewLinesIdx + addNewLines.length) +
+    changelog.slice(addNewLinesEndIdx).trimStart() +
     changelogTail;
 
   return { oldVersion, newVersion, newChangelog };

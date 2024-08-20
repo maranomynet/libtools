@@ -3,6 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- `updatePkgVersion`:
+  - feat: The `<!-- Add new lines here -->` marker is now optional
+  - feat: Treat `## Unreleased` as alias for `## Upcoming`
 
 ## 0.1.12
 
