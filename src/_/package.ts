@@ -130,6 +130,7 @@ const updateChangelog = async (
 
   const newChangelog =
     changelog.slice(0, addNewLinesEndIdx) +
+    (addNewLinesResult ? '' : '\n\n- ... <!-- Add new lines here. -->') +
     [
       '',
       '',

@@ -2,7 +2,7 @@
 
 ## Upcoming...
 
-- ... <!-- Add new lines here. -->
+- feat: Auto-insert "Add new lines here" marker if none is found in CHANGELOG
 
 ## 0.1.13
 
