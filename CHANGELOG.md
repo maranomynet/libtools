@@ -4,18 +4,13 @@
 
 - ... <!-- Add new lines here. -->
 
-## 0.1.14
-
-_2024-08-20_
-
-- feat: Auto-insert "Add new lines here" marker if none is found in CHANGELOG
-
-## 0.1.13
+## 0.1.13 – 0.1.14
 
 _2024-08-20_
 
 - `updatePkgVersion`:
   - feat: The `<!-- Add new lines here -->` marker is now optional
+  - feat: Auto-insert "Add new lines here" marker if none is found
   - feat: Treat `## Unreleased` as alias for `## Upcoming`
   - fix: Allow "## " to appear in changelog entries
 
