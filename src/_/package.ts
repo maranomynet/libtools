@@ -215,8 +215,6 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
       throw new Error('Aborted by user');
     }
 
-    console.log({ newVersion });
-
     pkg[versionKey] = newVersion;
     await Promise.all([
       writeFile(pkgFile, `${JSON.stringify(pkg, null, '  ')}\n`),
