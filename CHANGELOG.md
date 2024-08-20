@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.13
+
+_2024-08-20_
+
 - `updatePkgVersion`:
   - feat: The `<!-- Add new lines here -->` marker is now optional
   - feat: Treat `## Unreleased` as alias for `## Upcoming`
