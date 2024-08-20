@@ -6,6 +6,7 @@
 - `updatePkgVersion`:
   - feat: The `<!-- Add new lines here -->` marker is now optional
   - feat: Treat `## Unreleased` as alias for `## Upcoming`
+  - fix: Allow "## " to appear in changelog entries
 
 ## 0.1.12
 

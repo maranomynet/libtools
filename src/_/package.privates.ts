@@ -4,14 +4,15 @@ export const getLatestVersion = (
   oldVersionArr: [number, number, number] | undefined;
   oldVersionHeaderIdx: number;
 } => {
-  const oldVersionHeaderIdx = changelog.indexOf('## ');
+  changelog = `\n${changelog}`;
+  const oldVersionHeaderIdx = changelog.indexOf('\n## ');
 
   let oldVersionArr =
     oldVersionHeaderIdx >= 0
       ? changelog
           .slice(oldVersionHeaderIdx, oldVersionHeaderIdx + 128)
           .match(
-            /^##\s+(?:\d+\.\d+\.\d+(?:[-+][a-z0-9-.]+)?\s*[-–—]\s*)?(\d+)\.(\d+)\.(\d+)(?:[-+][a-z0-9-.]+)?\s*(?:\n|$)/
+            /^\n##\s+(?:\d+\.\d+\.\d+(?:[-+][a-z0-9-.]+)?\s*[-–—]\s*)?(\d+)\.(\d+)\.(\d+)(?:[-+][a-z0-9-.]+)?\s*(?:\n|$)/
           )
           ?.slice(1)
           .map(Number)
