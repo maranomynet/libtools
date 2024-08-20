@@ -2,6 +2,12 @@
 
 ## Upcoming...
 
+- ... <!-- Add new lines here. -->
+
+## 0.1.14
+
+_2024-08-20_
+
 - feat: Auto-insert "Add new lines here" marker if none is found in CHANGELOG
 
 ## 0.1.13
