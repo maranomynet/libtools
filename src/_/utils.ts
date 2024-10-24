@@ -1,7 +1,7 @@
 import { exec } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { createInterface } from 'node:readline';
+import { createInterface } from 'node:readline/promises';
 
 // ===========================================================================
 
@@ -144,23 +144,25 @@ export const $ = (
  *
  * @see https://github.com/maranomynet/libtools/tree/v0.1#promptyn
  */
-export const promptYN = (question: string, defAnswer?: 'y' | 'n'): Promise<boolean> =>
-  new Promise((resolve) => {
-    const defaultAnswer = defAnswer || 'y';
-    const options = defaultAnswer === 'n' ? 'y[N]' : '[Y]n';
-    const readline = createInterface({ input: process.stdin, output: process.stdout });
-    readline.question(`${question}  ${options}  `, (answer) => {
-      answer = answer.trim().toLowerCase() || defaultAnswer;
-      readline.close();
-      resolve(
-        /^y(?:es)?/.test(answer)
-          ? true
-          : /^n(?:o)?/.test(answer)
-          ? false
-          : promptYN('Please enter "y" or "n"')
-      );
-    });
-  });
+export const promptYN = async (
+  question: string,
+  defAnswer?: 'y' | 'n'
+): Promise<boolean> => {
+  const defaultAnswer = defAnswer || 'y';
+  const options = defaultAnswer === 'n' ? 'y[N]' : '[Y]n';
+
+  const readline = createInterface({ input: process.stdin, output: process.stdout });
+  let answer = await readline.question(`${question}  ${options}  `);
+  readline.close();
+
+  answer = answer.trim().toLowerCase() || defaultAnswer;
+
+  return /^y(?:es)?/.test(answer)
+    ? true
+    : /^n(?:o)?/.test(answer)
+    ? false
+    : promptYN('Please enter "y" or "n"');
+};
 
 // ===========================================================================
 

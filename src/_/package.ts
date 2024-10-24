@@ -1,7 +1,7 @@
 // import { describe, expect, test } from "bun:test";
 import { sync as glob } from 'glob';
 import { readFile, writeFile } from 'node:fs/promises';
-import { createInterface } from 'node:readline';
+import { createInterface } from 'node:readline/promises';
 
 import { getLatestVersion } from './package.privates.js';
 import {
@@ -113,18 +113,19 @@ const updateChangelog = async (
     upcomingEndIdx +
     (addNewLinesResult ? addNewLinesResult.index + addNewLinesResult[0].length : 0);
 
-  const dayOffset: number = !offerDateShift
-    ? 0
-    : await new Promise((resolve) => {
-        const readline = createInterface({
-          input: process.stdin,
-          output: process.stdout,
-        });
-        readline.question(`Delay release date by how many days? (0)  `, (answer) => {
-          readline.close();
-          resolve(parseInt(answer) || 0);
-        });
-      });
+  let dayOffset = 0;
+  if (offerDateShift) {
+    const readline = createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    const answerStr = await readline.question(
+      `Delay release date by how many days? (0)  `
+    );
+    readline.close();
+    dayOffset = parseInt(answerStr) || 0;
+  }
+
   const DAY_MS = 24 * 60 * 60 * 1000;
   const releaseDate = new Date(Date.now() + dayOffset * DAY_MS);
 
