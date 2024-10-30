@@ -74,7 +74,7 @@ const updateChangelog = async (
     )
     .trim()
     .split(/(?:^|\n\s*)- /)
-    .map((line) => line.trim().match(/^(\*\*BREAKING\*\*|feat:|fix:|docs:)/)?.[1])
+    .map((line) => line.trim().match(/^(\*\*BREAKING\*\*|feat:|fix:|docs:|perf:)/)?.[1])
     .filter(/** @type {((x: unknown) => x is string)} */ (x) => !!x);
 
   if (updates.length === 0) {
