@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.15
+
+_2024-10-30_
+
 - feat: Add `perf:` as a valid "patch"-level commit type
 
 ## 0.1.13 – 0.1.14

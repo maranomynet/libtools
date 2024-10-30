@@ -1,6 +1,6 @@
 {
   "name": "@maranomynet/libtools",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Convention-based helper functions for people authoring npm packages.",
   "repository": "ssh://git@github.com:maranomynet/libtools.git",
   "contributors": [
