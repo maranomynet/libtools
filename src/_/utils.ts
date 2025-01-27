@@ -185,11 +185,12 @@ export const readJSONFile = <Ret extends JSONObject>(path: string): Promise<Ret>
 export type Runner = 'npm' | 'yarn' | 'bun';
 
 const _defaultRunner: Runner = /*#__PURE__*/ (() => {
-  const runtime = existsSync('./bun.lockb')
-    ? 'bun'
-    : existsSync('./yarn.lock')
-    ? 'yarn'
-    : undefined;
+  const runtime =
+    existsSync('./bun.lockb') || existsSync('./bun.lock')
+      ? 'bun'
+      : existsSync('./yarn.lock')
+      ? 'yarn'
+      : undefined;
   if (runtime) {
     console.info(`${runtime} detected 👀`);
   }
