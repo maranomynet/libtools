@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.16
+
+_2025-01-27_
+
 - feat: Add support for `bun@1.2`'s plaintext `bun.lock` file
 
 ## 0.1.15
