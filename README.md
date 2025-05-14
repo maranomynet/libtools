@@ -1,4 +1,4 @@
-# `@maranomynet/libtools`
+# `@maranomynet/libtools` <!-- omit in toc -->
 
 Helper functions for people authoring npm packages. They are opinionated and
 eccentric, but they work surprisingly well.
@@ -478,7 +478,7 @@ The argument parsing is currenly very simple and stupid:
 ### `shell$`
 
 **Syntax:**
-`shell$(cmd: string | Array<string | Falsy>, continueOnError?: boolean): Promise<void>`
+`shell$(cmd: string | Array<string | Falsy>, handleError?: boolean | ((error: ExecException) => void)): Promise<void>`
 
 A wrapper around Node.js' `child_process.exec` command that returns a promise
 and pipes the output to the current process' stdout and stderr.
@@ -486,8 +486,11 @@ and pipes the output to the current process' stdout and stderr.
 If you pass an array of commands, they will be joined with `' && '` (after
 filtering out all falsy values).
 
-If `continueOnError` is `true`, the process will simply throw (i.e. reject the
+If `handleError` is `true`, the process will simply throw (i.e. reject the
 Promise) instead of exiting the `process` with code `1`.
+
+If `handleError` is a callback, it will be called with the error object before
+the promise resolves.
 
 ```ts
 import { shell$ } from '@maranomynet/libtools';
@@ -504,6 +507,12 @@ await shell$([
   null, // Falsy values are ignored/filtered
   `cd -`,
 ]);
+
+// Don't exit the process on error, just log it
+await shell$('bad_command boom!', true).catch(logError);
+
+// Shorthand version that also does not exit the process
+await shell$('bad_command boom!', logError);
 ```
 
 <!-- #fragment anchor(s) to not break older v0.1 @see links -->

@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process';
+import { exec, ExecException } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline/promises';
@@ -103,14 +103,17 @@ type Falsy = undefined | null | false | 0;
  * If you pass an array of commands, they will be joined with `' && '` (after
  * filtering out all falsy values).
  *
- * If `continueOnError` is `true`, the process will simply throw (i.e. reject
+ * If `handleError` is `true`, the process will simply throw (i.e. reject
  * the Promise) instead of exiting the `process` with code `1`.
  *
- * @see https://github.com/maranomynet/libtools/tree/v0.1#shell$
+ * If `handleError` is a callback, it will be called with the error object
+ * before the promise resolves.
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#shell
  */
 export const $ = (
   cmd: string | Array<string | Falsy>,
-  continueOnError?: boolean
+  handleError?: boolean | ((error: ExecException) => void)
 ): Promise<void> =>
   new Promise((resolve, reject) => {
     if (Array.isArray(cmd)) {
@@ -123,8 +126,15 @@ export const $ = (
     const execProc = exec(cmd, (error) => {
       if (!error) {
         resolve(undefined);
-      } else if (continueOnError) {
+      } else if (handleError === true) {
         reject(error);
+      } else if (handleError) {
+        try {
+          handleError(error);
+          resolve(undefined);
+        } catch (err) {
+          reject(error);
+        }
       } else {
         exit1();
       }
