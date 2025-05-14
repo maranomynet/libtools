@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.17
+
+_2025-05-14_
+
 - feat: `shell$` accepts a callback for its second `handleError` parameter
 - fix: Broken README link in the JSDoc for `shell$`
 
