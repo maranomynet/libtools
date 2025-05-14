@@ -31,9 +31,13 @@ process.argv.slice(2).forEach((arg) => {
   if (!key) {
     return;
   }
-  const loweValue = value?.toLowerCase();
+  const lowerValue = value?.toLowerCase();
   const argValue =
-    value == null || loweValue === 'true' ? true : loweValue === 'false' ? false : value;
+    value == null || lowerValue === 'true'
+      ? true
+      : lowerValue === 'false'
+      ? false
+      : value;
   _args[key] = argValue;
   if (argValue && typeof argValue === 'string') {
     _argStrings[key] = argValue;
