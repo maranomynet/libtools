@@ -9,6 +9,7 @@
 _2025-05-15_
 
 - feat: Add a simple `propmpt(question)` readline helper
+- feat: Support legacy `node@16` because it's easy
 
 ## 0.1.17
 

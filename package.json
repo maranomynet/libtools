@@ -43,7 +43,9 @@
     "scripts": null,
     "devDependencies": null,
     "hxmstyle": null,
-    "engines": null,
+    "engines": {
+      "node": ">=16.15"
+    },
     "sideEffects": false
   }
 }
