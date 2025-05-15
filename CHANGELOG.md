@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.18
+
+_2025-05-15_
+
 - feat: Add a simple `propmpt(question)` readline helper
 
 ## 0.1.17
