@@ -31,6 +31,7 @@ bun add --dev @maranomynet/libtools
   - [`shell$`](#shell)
   - [Script and Package Binary Runner](#script-and-package-binary-runner)
   - [Logging and Errors](#logging-and-errors)
+  - [`prompt`](#prompt)
   - [`promptYN`](#promptyn)
 - [Type Testing Helpers](#type-testing-helpers)
   - [Type `Expect<T>`](#type-expectt)
@@ -577,6 +578,20 @@ rejected.catch(logThenExit1); // Logs the error, then exits with code 1
 rejected.catch(logError); // Console logs the error and then continues
 // or...
 rejected.catch(ignoreError); // Ignores the error and continues
+```
+
+### `prompt`
+
+**Syntax:** `prompt(question: string): Promise<string>`
+
+Prompts the user with a question and returns a promise that resolves to the
+user's answer (trimmed).
+
+```ts
+import { prompt } from '@maranomynet/libtools';
+
+const name: string = await prompt('What is your name?');
+// What is your name?  ▍
 ```
 
 ### `promptYN`

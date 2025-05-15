@@ -1,7 +1,7 @@
 import { exec, ExecException } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import { createInterface } from 'node:readline/promises';
+import { createInterface } from 'node:readline';
 
 // ===========================================================================
 
@@ -154,22 +154,34 @@ export const $ = (
 
 /**
  * Prompts the user with a question and returns a promise that resolves to
+ * the user's answer (trimmed).
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#prompt
+ */
+export const prompt = async (question: string): Promise<string> => {
+  const readline = createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await new Promise<string>((resolve) => {
+    readline.question(`${question.trimEnd()}  `, resolve);
+  });
+  readline.close();
+  return answer.trim();
+};
+
+// ===========================================================================
+
+/**
+ * Prompts the user with a question and returns a promise that resolves to
  * `true` if the user enters "y" or "Y" and `false` if the user enters "n" or "N".
  *
  * @see https://github.com/maranomynet/libtools/tree/v0.1#promptyn
  */
 export const promptYN = async (
   question: string,
-  defAnswer?: 'y' | 'n'
+  defAnswer: 'y' | 'n' = 'y'
 ): Promise<boolean> => {
-  const defaultAnswer = defAnswer || 'y';
-  const options = defaultAnswer === 'n' ? 'y[N]' : '[Y]n';
+  const options = defAnswer === 'n' ? 'y[N]' : '[Y]n';
 
-  const readline = createInterface({ input: process.stdin, output: process.stdout });
-  let answer = await readline.question(`${question}  ${options}  `);
-  readline.close();
-
-  answer = answer.trim().toLowerCase() || defaultAnswer;
+  const answer = (await prompt(`${question}  ${options}`)) || defAnswer;
 
   return /^y(?:es)?/.test(answer)
     ? true

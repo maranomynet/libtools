@@ -1,7 +1,6 @@
 // import { describe, expect, test } from "bun:test";
 import { sync as glob } from 'glob';
 import { readFile, writeFile } from 'node:fs/promises';
-import { createInterface } from 'node:readline/promises';
 
 import { getLatestVersion } from './package.privates.js';
 import {
@@ -9,6 +8,7 @@ import {
   JSONObject,
   JSONValue,
   logThenExit1,
+  prompt,
   promptYN,
   readJSONFile,
   runPkgBin,
@@ -115,15 +115,8 @@ const updateChangelog = async (
 
   let dayOffset = 0;
   if (offerDateShift) {
-    const readline = createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-    const answerStr = await readline.question(
-      `Delay release date by how many days? (0)  `
-    );
-    readline.close();
-    dayOffset = parseInt(answerStr) || 0;
+    const answer = await prompt(`Delay release date by how many days? (0)`);
+    dayOffset = parseInt(answer) || 0;
   }
 
   const DAY_MS = 24 * 60 * 60 * 1000;
