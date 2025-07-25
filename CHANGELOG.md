@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.19
+
+_2025-07-25_
+
 - `updatePkgVersion`:
   - feat: Add support for `buildName` argument
   - feat: Don't error on changelog and package.json version mismatch — this
