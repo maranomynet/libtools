@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 
-import { distFolder } from './package.js';
-import { getLatestVersion } from './package.privates.js';
+import { _getLatestVersion, distFolder } from './package.js';
 
 describe('distFolder', () => {
   test('is _npom-lib', () => {
@@ -14,8 +13,8 @@ describe('getLatestVersion', () => {
 
   const tests: Array<{
     title: string;
-    input: Parameters<typeof getLatestVersion>[0];
-    expected: ReturnType<typeof getLatestVersion>;
+    input: Parameters<typeof _getLatestVersion>[0];
+    expected: ReturnType<typeof _getLatestVersion>;
   }> = [
     {
       title: 'returns undefined oldVersionArr when version header is missing',

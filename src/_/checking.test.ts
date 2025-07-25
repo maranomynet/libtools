@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'bun:test';
 
-import { normalizeTSCfgPaths } from './checking.privates.js';
+import { _normalizeTSCfgPaths } from './checking.js';
 
 describe('normalizeTSCfgPaths', () => {
   const tests: Array<{
     title: string;
-    input: Parameters<typeof normalizeTSCfgPaths>[0];
-    expected: ReturnType<typeof normalizeTSCfgPaths>;
+    input: Parameters<typeof _normalizeTSCfgPaths>[0];
+    expected: ReturnType<typeof _normalizeTSCfgPaths>;
   }> = [
     {
       title: 'accepts undefined',
@@ -56,7 +56,7 @@ describe('normalizeTSCfgPaths', () => {
 
   tests.forEach(({ title, input, expected }) => {
     test(title, () => {
-      expect(normalizeTSCfgPaths(input)).toEqual(expected);
+      expect(_normalizeTSCfgPaths(input)).toEqual(expected);
     });
   });
 });

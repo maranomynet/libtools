@@ -1,5 +1,20 @@
-import { normalizeTSCfgPaths } from './checking.privates.js';
 import { $, runPkgBin } from './utils.js';
+
+export const _normalizeTSCfgPaths = (tsConfigs?: Array<string>): Array<string> => [
+  './tsconfig.json',
+  ...(tsConfigs || [])
+    .map((path) =>
+      `./${`${path.trim()}/tsconfig.json`.replace(/(?:\.\/+)+/, '')}`
+        .replace(/\/\.\//g, '/')
+        .replace(/\.json\/tsconfig\.json$/, '.json')
+        .replace(/\/{2,}/, '/')
+    )
+    .filter((path) => path !== './tsconfig.json')
+    .sort()
+    .filter((path, i, arr) => i === 0 || path !== arr[i - 1]),
+];
+
+// ===========================================================================
 
 type LintOpts = {
   autofix?: boolean;
@@ -79,7 +94,7 @@ type TypeCheckOpts = ErrorCheckOpts & {
 export const typeCheckSources = async (opts: TypeCheckOpts = {}): Promise<void> => {
   const watchFlags = opts.watch ? '--watch --preserveWatchOutput' : '';
   await Promise.all(
-    normalizeTSCfgPaths(opts.tsWorkspaces).map((tsConfig) =>
+    _normalizeTSCfgPaths(opts.tsWorkspaces).map((tsConfig) =>
       $(
         `${runPkgBin}tsc --project ${tsConfig} --noEmit ${watchFlags} --pretty --incremental false`,
         opts.continueOnError

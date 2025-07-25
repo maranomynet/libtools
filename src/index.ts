@@ -27,7 +27,7 @@ export {
   logError,
   logThenExit1,
   promptYN,
-  runCmd, // eslint-disable-line deprecation/deprecation
+  runCmd,
   runner,
   runPkgBin,
   runScript,
