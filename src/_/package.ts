@@ -55,13 +55,13 @@ export const _getLatestVersion = (
 // eslint-disable-next-line complexity
 const updateChangelog = async (
   changelogFileName: string,
-  opts?: Pick<UpdatePkgVersionOpts, 'offerDateShift' | 'preReleaseName'>
+  opts?: Pick<UpdatePkgVersionOpts, 'offerDateShift' | 'preReleaseName' | 'buildName'>
 ): Promise<{
   oldVersion: string;
   newVersion: string;
   newChangelog: string;
 }> => {
-  const { offerDateShift, preReleaseName } = opts || {};
+  const { offerDateShift, preReleaseName, buildName } = opts || {};
   const changelogFull = (await readFile(changelogFileName)).toString();
   const changelog = changelogFull.slice(0, 4000);
   const changelogTail = changelogFull.slice(4000);
@@ -137,7 +137,9 @@ const updateChangelog = async (
   }
 
   const newVersion =
-    newVersionArr.join('.') + (preReleaseName ? `-${preReleaseName}` : '');
+    newVersionArr.join('.') +
+    (preReleaseName ? `-${preReleaseName}` : '') +
+    (buildName ? `+${buildName}` : '');
 
   const addNewLinesResult = addNewLinesRe.exec(changelog.slice(upcomingEndIdx));
   const addNewLinesEndIdx =
@@ -180,6 +182,14 @@ export type UpdatePkgVersionOpts = {
    * Deafult: `undefined` (none)
    */
   preReleaseName?: string;
+
+  /**
+   * Optional build-number/build-name to append to the version number. (e.g. `'build-999'`)
+   *
+   * Deafult: `undefined` (none)
+   */
+  buildName?: string;
+
   /**
    * Should the user be offered to shift the release date N days into the future.
    *
@@ -214,13 +224,17 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
     root = '.',
     offerDateShift,
     preReleaseName,
+    buildName,
     versionKey = 'version',
     changelogSuffix = '',
     pkgJsonSuffix = '',
   } = opts || {};
 
-  if (preReleaseName && !/^[a-z0-9.-]+$/.test(preReleaseName)) {
+  if (preReleaseName && !/^[a-z0-9.+-]+$/.test(preReleaseName)) {
     throw new Error(`Invalid pre-release name: ${JSON.stringify(preReleaseName)}`);
+  }
+  if (buildName && !/^[a-z0-9.-]+$/.test(buildName)) {
+    throw new Error(`Invalid build name: ${JSON.stringify(buildName)}`);
   }
 
   const changelogFile = `${root}/CHANGELOG${changelogSuffix}.md`;
@@ -231,7 +245,7 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
 
     const { /* oldVersion,  */ newVersion, newChangelog } = await updateChangelog(
       changelogFile,
-      { offerDateShift, preReleaseName }
+      { offerDateShift, preReleaseName, buildName }
     );
 
     const versionOK = await promptYN(`New version: ${newVersion}\nIs this correct?`);

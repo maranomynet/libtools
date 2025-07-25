@@ -4,6 +4,7 @@
 
 - ... <!-- Add new lines here. -->
 - `updatePkgVersion`:
+  - feat: Add support for `buildName` argument
   - feat: Don't error on changelog and package.json version mismatch — this
     doesn't work well with pre-release versions and build numbers
   - fix: Ignore build numbers like the semver spec dictates
