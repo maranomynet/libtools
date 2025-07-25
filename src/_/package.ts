@@ -229,16 +229,10 @@ export const updatePkgVersion = async (opts?: UpdatePkgVersionOpts): Promise<voi
   try {
     const pkg = await readJSONFile(pkgFile);
 
-    const { oldVersion, newVersion, newChangelog } = await updateChangelog(
+    const { /* oldVersion,  */ newVersion, newChangelog } = await updateChangelog(
       changelogFile,
       { offerDateShift, preReleaseName }
     );
-
-    if (oldVersion !== pkg[versionKey]) {
-      throw new Error(
-        `Version mismatch between ${changelogFile} (${oldVersion}) and ${pkgFile} (${pkg[versionKey]})`
-      );
-    }
 
     const versionOK = await promptYN(`New version: ${newVersion}\nIs this correct?`);
     if (!versionOK) {

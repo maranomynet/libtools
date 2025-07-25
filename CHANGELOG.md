@@ -3,6 +3,9 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- `updatePkgVersion`:
+  - feat: Don't error on changelog and package.json version mismatch — this
+    doesn't work well with pre-release versions and build numbers
 
 ## 0.1.18
 
