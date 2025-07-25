@@ -23,30 +23,27 @@ type PgkJson = {
 export const _getLatestVersion = (
   changelog: string
 ): {
-  oldVersionArr: [number, number, number] | undefined;
+  oldVersionArr: [number, number, number];
   oldVersionHeaderIdx: number;
 } => {
   changelog = `\n${changelog}`;
-  const oldVersionHeaderIdx = changelog.indexOf('\n## ');
 
-  let oldVersionArr =
-    oldVersionHeaderIdx >= 0
-      ? changelog
-          .slice(oldVersionHeaderIdx, oldVersionHeaderIdx + 128)
-          .match(
-            /^\n##\s+(?:\d+\.\d+\.\d+(?:[-+][a-z0-9-.]+)?\s*[-–—]\s*)?(\d+)\.(\d+)\.(\d+)(?:[-+][a-z0-9-.]+)?\s*(?:\n|$)/
-          )
-          ?.slice(1)
-          .map(Number)
-      : [0, 0, 0];
+  const match = changelog.match(
+    /\n##\s+(?:\d+\.\d+\.\d+(?:\+[a-z0-9-.]+)?\s*[-–—]\s*)?(\d+)\.(\d+)\.(\d+)(?:\+[a-z0-9-.]+)?\s*(?:\n|$)/
+  );
 
-  if (oldVersionArr && oldVersionArr.length !== 3) {
-    oldVersionArr = undefined;
+  if (!match) {
+    return {
+      oldVersionArr: [0, 0, 0],
+      oldVersionHeaderIdx: changelog.length - 1,
+    };
   }
 
+  let oldVersionArr = match.slice(1).map(Number) as [number, number, number];
+
   return {
-    oldVersionArr: oldVersionArr as [number, number, number] | undefined,
-    oldVersionHeaderIdx,
+    oldVersionArr,
+    oldVersionHeaderIdx: match?.index ?? -1,
   };
 };
 
@@ -83,17 +80,20 @@ const updateChangelog = async (
   }
   const upcomingEndIdx = upcomingResult.index + upcomingResult[0].length;
 
-  const { oldVersionArr, oldVersionHeaderIdx } = getLatestVersion(
+  const { oldVersionArr, oldVersionHeaderIdx } = _getLatestVersion(
     changelog.slice(upcomingEndIdx)
   );
-  if (!oldVersionArr) {
-    throw new Error(`Could not find a valid "last version" in ${changelogFileName}`);
-  }
   const oldVersion = oldVersionArr.join('.');
 
   if (
     oldVersion === '0.0.0' &&
-    !(await promptYN('Are you ready for initial release?', 'n'))
+    !(await promptYN(
+      [
+        'No valid previous version number were found.',
+        'Are you aiming for initial (0.0.0) release?',
+      ].join('\n'),
+      'n'
+    ))
   ) {
     throw new Error('Aborted by user');
   }

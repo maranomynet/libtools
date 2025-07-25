@@ -21,7 +21,7 @@ describe('getLatestVersion', () => {
       input: '- feat: Initial release\n',
       expected: {
         oldVersionArr: [0, 0, 0],
-        oldVersionHeaderIdx: -1,
+        oldVersionHeaderIdx: 24,
       },
     },
     {
@@ -29,15 +29,15 @@ describe('getLatestVersion', () => {
       input: '',
       expected: {
         oldVersionArr: [0, 0, 0],
-        oldVersionHeaderIdx: -1,
+        oldVersionHeaderIdx: 0,
       },
     },
     {
       title: 'returns undefined oldVersionArr when version header is empty',
       input: '## \n- feat: Something\n',
       expected: {
-        oldVersionArr: undefined,
-        oldVersionHeaderIdx: 0,
+        oldVersionArr: [0, 0, 0],
+        oldVersionHeaderIdx: 22,
       },
     },
     {
@@ -98,50 +98,68 @@ describe('getLatestVersion', () => {
     },
 
     {
-      title: 'only checks the first H2 (##) header',
+      title: 'Looks past the first H2 (##) header', // important for skipping pre-release tag versions
       input: '## Surprise!!\n\nWat!?\n\n## 1.0.0\n\n- feat: Something\n',
       expected: {
-        oldVersionArr: undefined,
-        oldVersionHeaderIdx: 0,
+        oldVersionArr: [1, 0, 0],
+        oldVersionHeaderIdx: 22,
       },
     },
     {
       title: 'does NOT tolerate spaces in versions',
       input: '## 1. 0.0\n\n- feat: Something\n',
       expected: {
-        oldVersionArr: undefined,
-        oldVersionHeaderIdx: 0,
+        oldVersionArr: [0, 0, 0],
+        oldVersionHeaderIdx: 29,
       },
     },
     {
-      title: 'supports prerelease versions',
+      title: 'Skips/ignores prerelease versions',
       input: '## 1.0.0-beta.1\n\n- feat: Something\n',
       expected: {
-        oldVersionArr: [1, 0, 0],
-        oldVersionHeaderIdx: 0,
+        oldVersionArr: [0, 0, 0],
+        oldVersionHeaderIdx: 35,
       },
     },
     {
-      title: 'supports build numbers in versions',
-      input: '## 1.0.0+beta.1\n\n- feat: Something\n',
+      title: 'Skips prerelease versions to pick up previous stable version',
+      input: '## 1.0.0-beta.1\n\n- feat: Something\n\n## 0.5.0\n\n- feat: Something\n',
+      expected: {
+        oldVersionArr: [0, 5, 0],
+        oldVersionHeaderIdx: 36,
+      },
+    },
+    {
+      title: 'skips/ignores prerelease versions in a range',
+      input: '## 1.0.0-beta.1+build1 – 1.0.77-beta.3\n\n- feat: Something\n',
+      expected: {
+        oldVersionArr: [0, 0, 0],
+        oldVersionHeaderIdx: 58,
+      },
+    },
+    {
+      title: 'skips prerelease versions in a range to pick up previous stable version',
+      input:
+        '## 1.0.7-beta.1 – 1.1.0-beta.3\n\n- feat: Something\n\n## 1.0.6\n\n- feat: Something\n',
+      expected: {
+        oldVersionArr: [1, 0, 6],
+        oldVersionHeaderIdx: 51,
+      },
+    },
+
+    {
+      title: 'Ignores build numbers in versions',
+      input: '## 1.0.0+build-123\n\n- feat: Something\n',
       expected: {
         oldVersionArr: [1, 0, 0],
         oldVersionHeaderIdx: 0,
       },
     },
     {
-      title: 'supports prerelease versions in a range',
-      input: '## 1.0.0 – 1.0.1-beta.1\n\n- feat: Something\n',
+      title: 'ignores build numbers in a range',
+      input: '## 1.0.0+build-1 – 1.0.77+build-3\n\n- feat: Something\n',
       expected: {
-        oldVersionArr: [1, 0, 1],
-        oldVersionHeaderIdx: 0,
-      },
-    },
-    {
-      title: 'supports prerelease versions in a range',
-      input: '## 1.0.0-beta.1 – 1.0.1-beta.3\n\n- feat: Something\n',
-      expected: {
-        oldVersionArr: [1, 0, 1],
+        oldVersionArr: [1, 0, 77],
         oldVersionHeaderIdx: 0,
       },
     },
@@ -149,7 +167,7 @@ describe('getLatestVersion', () => {
 
   tests.forEach(({ title, input, expected }) => {
     test(title, () => {
-      expect(getLatestVersion(input)).toEqual(expected);
+      expect(_getLatestVersion(input)).toEqual(expected);
     });
   });
 });

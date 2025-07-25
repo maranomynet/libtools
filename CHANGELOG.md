@@ -6,6 +6,11 @@
 - `updatePkgVersion`:
   - feat: Don't error on changelog and package.json version mismatch — this
     doesn't work well with pre-release versions and build numbers
+  - fix: Ignore build numbers like the semver spec dictates
+  - fix: Skip over pre-releases when detecting the "last" stable version in
+    the changelog, and infer next version number from all preceeding
+    pre-release notes each time (in case multiple pre-releases are present
+    with incremental/partial notes)
 
 ## 0.1.18
 
