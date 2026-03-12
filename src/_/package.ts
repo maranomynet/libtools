@@ -39,11 +39,11 @@ export const _getLatestVersion = (
     };
   }
 
-  let oldVersionArr = match.slice(1).map(Number) as [number, number, number];
+  const oldVersionArr = match.slice(1).map(Number) as [number, number, number];
 
   return {
     oldVersionArr,
-    oldVersionHeaderIdx: match?.index ?? -1,
+    oldVersionHeaderIdx: match.index ?? -1,
   };
 };
 
@@ -343,7 +343,7 @@ const makeLibPackageJson = async (opts: MakeLibPackageJsonOpts): Promise<void> =
 
   libPkg.exports = entryPoints.reduce((exports, file) => {
     const token = file.replace(/\.tsx?$/, '');
-    const expToken = token === 'index' ? '.' : `./${token}`;
+    const expToken = token === 'index' ? '.' : `./${token.replace(/\/index$/, '')}`;
     const expObj: (typeof exports)[string] = {
       import: `./esm/${token}.js`,
       require: `./${token}.js`,
