@@ -4,6 +4,10 @@
 
 - ... <!-- Add new lines here. -->
 
+## 0.1.20
+
+_2026-03-12_
+
 - fix: Strip trailing "/index" off `pgk.exports` keys
 
 ## 0.1.19
