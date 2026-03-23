@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- docs: Add back missing JSDoc comments for `args` and `argStrings` exports
 
 ## 0.1.20
 

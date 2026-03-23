@@ -5,25 +5,7 @@ import { createInterface } from 'node:readline';
 
 // ===========================================================================
 
-/**
- * The command line arguments passed to the script, parsed into an object
- * where the keys are the argument names and the values are the argument values.
- *
- * For example, if the script is called with `--foo=bar --baz --smu=false`, then `args` will be:
- * `{ foo: 'bar', baz: true, smu: false }`
- *
- * @see https://github.com/maranomynet/libtools/tree/v0.1#args-object
- */
 const _args: Record<string, string | boolean | undefined> = {};
-
-/**
- * Filtered convenience clone of `args` with all `boolean` values removed.
- *
- * For example, if the script is called with `--foo=bar --baz --smu=false`, then `args` will be:
- * `{ foo: 'bar' }`
- *
- * @see https://github.com/maranomynet/libtools/tree/v0.1#argstrings-object
- */
 const _argStrings: Record<string, string | undefined> = {};
 
 process.argv.slice(2).forEach((arg) => {
@@ -44,7 +26,43 @@ process.argv.slice(2).forEach((arg) => {
   }
 });
 
+/**
+ * The command line arguments passed to the script, parsed into an object
+ * where the keys are the argument names and the values are the argument values.
+ *
+ * For example, if the script is called with
+ *
+ * ```
+ * --foo=bar --baz --smu=false
+ * ```
+ *
+ * then `args` will be:
+ *
+ * ```
+ * { foo: 'bar', baz: true, smu: false }
+ * ```
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#args-object
+ */
 export const args: Readonly<typeof _args> = _args;
+
+/**
+ * Filtered convenience clone of `args` with all `boolean` values removed.
+ *
+ * For example, if the script is called with
+ *
+ * ```
+ * --foo=bar --baz --smu=false
+ * ```
+ *
+ * then `args` will be:
+ *
+ * ```
+ * { foo: 'bar' }
+ * ```
+ *
+ * @see https://github.com/maranomynet/libtools/tree/v0.1#argstrings-object
+ */
 export const argStrings: Readonly<typeof _argStrings> = _argStrings;
 
 // ===========================================================================
