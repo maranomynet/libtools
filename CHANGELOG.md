@@ -3,6 +3,8 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- fix: Make `eslint` also include `.mjs` files
+- fix: Make `prettier` also include JS and TS sources (not rely on `eslint`)
 - docs: Add back missing JSDoc comments for `args` and `argStrings` exports
 
 ## 0.1.20

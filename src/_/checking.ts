@@ -29,7 +29,7 @@ const eslint = ({ autofix, errorsonly, silent }: LintOpts = {}) =>
     autofix ? '--fix' : '',
     silent ? '-o /dev/null' : '',
     errorsonly ? '--quiet' : '',
-    `--ignore-path .gitignore  "**/*.{cjs,js,ts,tsx}"`,
+    `--ignore-path .gitignore  "**/*.{mjs,cjs,js,ts,tsx}"`,
   ].join(' ');
 
 const prettier = ({ autofix, silent, errorsonly }: LintOpts = {}) =>
@@ -39,7 +39,7 @@ const prettier = ({ autofix, silent, errorsonly }: LintOpts = {}) =>
     autofix ? '--write' : '--check',
     silent ? '--loglevel=error' : '',
     errorsonly ? '--loglevel=error' : '',
-    `--no-error-on-unmatched-pattern --ignore-path .gitignore "**/*.{json,md,yml,css,html}"`,
+    `--no-error-on-unmatched-pattern --ignore-path .gitignore "**/*.{mjs,cjs,js,ts,tsx,json,md,yml,css,html}"`,
   ].join(' ');
 
 // ===========================================================================
