@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+
+## 0.1.21
+
+_2026-04-14_
+
 - fix: Make `eslint` also include `.mjs` files
 - fix: Make `prettier` also include JS and TS sources (not rely on `eslint`)
 - fix: `shell$` should reject with errors thrown by `handleError` callbacks
