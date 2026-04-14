@@ -151,7 +151,7 @@ export const $ = (
           handleError(error);
           resolve(undefined);
         } catch (err) {
-          reject(error);
+          reject(err);
         }
       } else {
         exit1();

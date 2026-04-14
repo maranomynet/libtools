@@ -5,6 +5,7 @@
 - ... <!-- Add new lines here. -->
 - fix: Make `eslint` also include `.mjs` files
 - fix: Make `prettier` also include JS and TS sources (not rely on `eslint`)
+- fix: `shell$` should reject with errors thrown by `handleError` callbacks
 - docs: Add back missing JSDoc comments for `args` and `argStrings` exports
 
 ## 0.1.20
