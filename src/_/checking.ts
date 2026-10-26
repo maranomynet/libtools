@@ -3,12 +3,13 @@ import { $, runPkgBin } from './utils.js';
 export const _normalizeTSCfgPaths = (tsConfigs?: Array<string>): Array<string> => [
   './tsconfig.json',
   ...(tsConfigs || [])
-    .map((path) =>
-      `./${`${path.trim()}/tsconfig.json`.replace(/(?:\.\/+)+/, '')}`
+    .map((path) => {
+      const tsConfigPath = `${path.trim()}/tsconfig.json`;
+      return `./${tsConfigPath.replace(/(?:\.\/+)+/, '')}`
         .replace(/\/\.\//g, '/')
         .replace(/\.json\/tsconfig\.json$/, '.json')
-        .replace(/\/{2,}/, '/')
-    )
+        .replace(/\/{2,}/, '/');
+    })
     .filter((path) => path !== './tsconfig.json')
     .sort()
     .filter((path, i, arr) => i === 0 || path !== arr[i - 1]),
