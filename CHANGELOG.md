@@ -3,6 +3,7 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. -->
+- fix: Remove `--ignore-path .gitignore` from `prettier` function's arguments
 
 ## 0.1.21
 

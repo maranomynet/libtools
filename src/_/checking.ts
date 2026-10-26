@@ -40,7 +40,8 @@ const prettier = ({ autofix, silent, errorsonly }: LintOpts = {}) =>
     autofix ? '--write' : '--check',
     silent ? '--loglevel=error' : '',
     errorsonly ? '--loglevel=error' : '',
-    `--no-error-on-unmatched-pattern --ignore-path .gitignore "**/*.{mjs,cjs,js,ts,tsx,json,md,yml,css,html}"`,
+    `--no-error-on-unmatched-pattern`,
+    `"**/*.{mjs,cjs,js,ts,tsx,json,md,yml,css,html}"`,
   ].join(' ');
 
 // ===========================================================================
